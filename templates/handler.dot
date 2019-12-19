@@ -1,0 +1,7 @@
+/*
+  {{=it.verb.toUpperCase()}} {{=it.path}}
+  {{=it.description}}
+*/
+this.{{=it.verb}}('{{=it.path}}', (schema, request) => {
+  return new Response({{=it.statusCode}}, {{=it.headers}}, {{=it.body}});
+});
