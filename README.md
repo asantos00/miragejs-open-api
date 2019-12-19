@@ -5,7 +5,7 @@ Generate [miragejs](https://miragejs.com/) code based on an [OpenAPI Specificati
 # Roadmap
 
 - Server configuration and ~~routes (path, verb, headers, response code).~~
-- Based on flag (and on REST standards) create logic do CRUD the models.
+- Try to generate model update logic for CRUD operations based on the specification
 - Models based on the JsonSchema present on the spec.
 - Factories for the models that generate fake data based on the type and name of the model fields.
 
