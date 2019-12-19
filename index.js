@@ -39,7 +39,7 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
     verb,
     statusCode,
     path,
-    headers: JSON.stringify({ "Content-Type": contentType }),
+    headers: JSON.stringify({}),
     description: verbDefinition.description,
     body: JSON.stringify(body, null, 4)
   });
