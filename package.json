@@ -1,0 +1,15 @@
+{
+  "name": "miragejs-open-api",
+  "version": "0.0.1",
+  "description": "Generate miragejs code based on an OpenAPI Specification",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "swagger-parser": "^8.0.1"
+  }
+}
