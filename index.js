@@ -62,5 +62,3 @@ async function run() {
 (async () => {
   run();
 })();
-
-module.exports = run;
