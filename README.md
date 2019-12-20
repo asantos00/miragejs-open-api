@@ -1,4 +1,4 @@
-# miragejs-openapi
+# miragejs-open-api
 
 Generate [miragejs](https://miragejs.com/) code based on an [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification).
 
