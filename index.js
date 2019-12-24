@@ -1,9 +1,12 @@
+#!/usr/bin/env node
+var argv = require('minimist')(process.argv.slice(2));
 const SwaggerParser = require("swagger-parser");
 const doT = require('dot');
-const fs = require('fs');
+const fse = require('fs-extra');
 const prettier = require("prettier");
 const jsf = require('json-schema-faker');
 
+const output = argv.o;
 const contentType = 'application/json';
 
 doT.templateSettings.strip = false;
@@ -56,7 +59,7 @@ async function run() {
 
   const prettified = prettier.format(apiPaths, { parser: 'babel' });
 
-  fs.writeFileSync('./dist/mirage.js', prettified, 'utf-8');
+  fse.outputFileSync(outputPath, prettified);
 }
 
 (async () => {
