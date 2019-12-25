@@ -3,13 +3,13 @@ const doT = require('dot');
 const fse = require('fs-extra');
 const prettier = require("prettier");
 const jsf = require('json-schema-faker');
-const getProcessArguments = require('./utils/args');
+const { getProcessArguments } = require('./utils/args');
 
 const contentType = 'application/json';
 
 doT.templateSettings.strip = false;
 const dots = doT.process({
-  path: "./templates"
+  path: __dirname + "/templates",
 });
 
 const replaceParamNotation = (url) => url.replace('{', ':').replace('}', '')
@@ -50,11 +50,12 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
 
 async function run() {
   const {
-    o,
-  } = getProcessArguments({ ...defaultOptions, options });
+    output,
+    input,
+  } = getProcessArguments();
 
-
-  const { paths } = await SwaggerParser.dereference("example.yaml");
+  
+  const { paths } = await SwaggerParser.dereference(input);
 
   const apiPaths = Object.keys(paths)
     .map(path => generateRouteFromPath(path, paths[path]))
@@ -62,7 +63,9 @@ async function run() {
 
   const prettified = prettier.format(apiPaths, { parser: 'babel' });
 
-  fse.outputFileSync(o, prettified);
+  fse.outputFileSync(output, prettified);
 }
 
-module.exports.default = run;
+module.exports = {
+  run
+};

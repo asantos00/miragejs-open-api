@@ -1,7 +1,10 @@
+const log = console.log;
+
 const argv = require('minimist')(process.argv.slice(2),
     {
         alias: {
             o: 'output',
+            i: 'input',
         },
         default: {
             o: './mirage.js'
@@ -10,10 +13,15 @@ const argv = require('minimist')(process.argv.slice(2),
 );
 
 function getProcessArguments() {
+
+    if (!argv.input) {
+        log("An input file is required")
+    }
+
     return argv;
 }
 
 
 module.exports = {
-    default: getProcessArguments
+    getProcessArguments
 }
