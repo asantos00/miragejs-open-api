@@ -3,8 +3,7 @@ const doT = require('dot');
 const fse = require('fs-extra');
 const prettier = require("prettier");
 const jsf = require('json-schema-faker');
-const { getProcessArguments } = require('./utils/args');
-
+const { getProcessArguments } = require('./utils/processArguments');
 const contentType = 'application/json';
 
 doT.templateSettings.strip = false;
@@ -54,7 +53,6 @@ async function run() {
     input,
   } = getProcessArguments();
 
-  
   const { paths } = await SwaggerParser.dereference(input);
 
   const apiPaths = Object.keys(paths)

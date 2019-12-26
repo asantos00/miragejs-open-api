@@ -1,5 +1,3 @@
-const log = console.log;
-
 const argv = require('yargs')
     .option('o', {
         alias: 'output',
@@ -12,20 +10,14 @@ const argv = require('yargs')
     })
     .option('i', {
         alias: 'input',
-        describe: 'Input file path with open api specification.',
+        describe: 'Input file path/url with open api specification.',
         type: 'string',
         nargs: 1,
         demand: true,
-        demand: 'An input path is required',
+        demand: 'An input path/url is required',
     }).argv
 
 function getProcessArguments() {
-
-    if (!argv.input) {
-        log("An input file is required")
-        process.exit();
-    }
-
     return argv;
 }
 
