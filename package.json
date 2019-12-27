@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "eslint ./src/**/*.js",
     "format": "prettier src/**/*.js --write"
   },
@@ -16,7 +16,11 @@
     }
   },
   "lint-staged": {
-    "*.js": ["npm run format", "npm run lint", "git add"]
+    "*.js": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
   },
   "bin": {
     "miragejs-open-api": "./index.js"
@@ -33,9 +37,14 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "babel-jest": "^24.9.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.8.0",
+    "eslint-plugin-jest": "^23.1.1",
     "husky": "^3.1.0",
+    "jest": "^24.9.0",
     "lint-staged": "^9.5.0"
   }
 }

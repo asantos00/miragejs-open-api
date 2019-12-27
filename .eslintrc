@@ -1,8 +1,10 @@
 {
   "extends": ["eslint:recommended", "prettier"],
   "env": {
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
+  "plugins": ["jest"],
   "parserOptions": {
     "ecmaVersion": 2017,
     "sourceType": "module"
