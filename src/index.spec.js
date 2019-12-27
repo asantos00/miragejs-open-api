@@ -11,10 +11,10 @@ it("runs", async () => {
     output: "./dist/test-generated",
   });
 
-  expect(mockOutputFileSync).toHaveBeenCalledWith(
+  expect(mockOutputFileSync.mock.calls[0][0]).toBe(
     "./dist/test-generated/routes.js",
   );
-  expect(mockOutputFileSync).toHaveBeenCalledWith(
+  expect(mockOutputFileSync.mock.calls[1][0]).toBe(
     "./dist/test-generated/server.js",
   );
 });
