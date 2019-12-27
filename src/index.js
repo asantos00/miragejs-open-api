@@ -59,7 +59,8 @@ async function run() {
     .map(path => generateRouteFromPath(path, paths[path]))
     .join('\n');
 
-  const prettified = prettier.format(apiPaths, { parser: 'babel' });
+  const prettified = prettier
+    .format(apiPaths, { parser: "babel" });
 
   fse.outputFileSync(output, prettified);
 }
