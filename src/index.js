@@ -1,17 +1,17 @@
 const SwaggerParser = require("swagger-parser");
-const doT = require('dot');
-const fse = require('fs-extra');
+const doT = require("dot");
+const fse = require("fs-extra");
 const prettier = require("prettier");
-const jsf = require('json-schema-faker');
-const { getProcessArguments } = require('./utils/processArguments');
-const contentType = 'application/json';
+const jsf = require("json-schema-faker");
+const { getProcessArguments } = require("./utils/processArguments");
+const contentType = "application/json";
 
 doT.templateSettings.strip = false;
 const dots = doT.process({
-  path: __dirname + "/templates",
+  path: __dirname + "/templates"
 });
 
-const replaceParamNotation = (url) => url.replace('{', ':').replace('}', '')
+const replaceParamNotation = url => url.replace("{", ":").replace("}", "");
 
 const generateRouteFromPath = (pathString, pathDefinition) => {
   const verbsInPath = Object.keys(pathDefinition);
@@ -19,7 +19,7 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
     generateHandlerFromVerb(verb, pathString, pathDefinition[verb])
   );
 
-  return handlers.join('\n');
+  return handlers.join("\n");
 };
 
 const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
@@ -48,18 +48,15 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
 };
 
 async function run() {
-  const {
-    output,
-    input,
-  } = getProcessArguments();
+  const { output, input } = getProcessArguments();
 
   const { paths } = await SwaggerParser.dereference(input);
 
   const apiPaths = Object.keys(paths)
     .map(path => generateRouteFromPath(path, paths[path]))
-    .join('\n');
+    .join("\n");
 
-  const prettified = prettier.format(apiPaths, { parser: 'babel' });
+  const prettified = prettier.format(apiPaths, { parser: "babel" });
 
   fse.outputFileSync(output, prettified);
 }
