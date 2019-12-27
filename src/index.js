@@ -12,30 +12,35 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
   const verbsInPath = Object.keys(pathDefinition);
 
   return verbsInPath.reduce((acc, verb) => {
-    const [content, dependencies] = generateHandlerFromVerb(
+    const [handler, handlerDependencies] = generateHandlerFromVerb(
       verb,
       pathString,
       pathDefinition[verb],
     );
 
-    const currentContent = acc[0] || "";
+    const currentHandlers = acc[0] || [];
     const currentDependencies = acc[1] || [];
+
+    // Merge content and dependencies
     return [
-      `${currentContent} \n ${content}`,
-      [...dependencies, ...currentDependencies],
+      [...currentHandlers, handler],
+      [...handlerDependencies, ...currentDependencies],
     ];
   }, []);
 };
 
 const generateRoutes = paths => {
   const [content, dependencies] = Object.keys(paths).reduce((acc, path) => {
-    const [content, dependencies] = generateRouteFromPath(path, paths[path]);
+    const [routeHandlers, routeDependencies] = generateRouteFromPath(
+      path,
+      paths[path],
+    );
 
-    const currentContent = acc[0] || "";
-    const currentDependencies = acc[1] || [];
+    const handlers = acc[0] || [];
+    const dependencies = acc[1] || [];
     return [
-      `${currentContent} \n ${content}`,
-      [...dependencies, ...currentDependencies],
+      [...handlers, ...routeHandlers],
+      [...dependencies, ...routeDependencies],
     ];
   }, []);
 
@@ -43,7 +48,7 @@ const generateRoutes = paths => {
     `${ConfigManager.output}/routes.js`,
     buildFileContents({
       dependencies,
-      content,
+      content: content.join("\n"),
     }),
   );
 };
