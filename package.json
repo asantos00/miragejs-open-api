@@ -15,7 +15,7 @@
     }
   },
   "lint-staged": {
-    "*.js": "npm run format && npm run lint"
+    "*.js": ["npm run format", "npm run lint", "git add"]
   },
   "bin": {
     "miragejs-open-api": "./index.js"
