@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
-    "format": "prettier ./**/*.js --write"
+    "lint": "eslint src",
+    "format": "prettier src/**/*.js --write"
   },
   "husky": {
     "hooks": {
