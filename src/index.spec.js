@@ -1,10 +1,20 @@
-import MirageOpenAPIGenerator from "./index";
+it("runs", async () => {
+  const mockOutputFileSync = jest.fn();
+  jest.mock("fs-extra", () => ({
+    outputFileSync: mockOutputFileSync,
+  }));
 
-it("runs", () => {
-  const mockYargs = {
-    option: () => mockYargs
-  };
-  jest.mock("yargs", () => mockYargs);
+  const MirageOpenAPIGenerator = require("./index");
 
-  MirageOpenAPIGenerator.run();
+  await MirageOpenAPIGenerator.run({
+    input: "./example.yaml",
+    output: "./dist/test-generated",
+  });
+
+  expect(mockOutputFileSync).toHaveBeenCalledWith(
+    "./dist/test-generated/routes.js",
+  );
+  expect(mockOutputFileSync).toHaveBeenCalledWith(
+    "./dist/test-generated/server.js",
+  );
 });
