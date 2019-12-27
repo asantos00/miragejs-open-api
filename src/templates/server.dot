@@ -1,0 +1,5 @@
+const server = new Server({
+  baseConfig() {
+    this.urlPrefix = "{{=it.urlPrefix}}"
+  }
+})

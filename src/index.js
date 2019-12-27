@@ -22,6 +22,18 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
   return handlers.join("\n");
 };
 
+const generateServerConfiguration = servers => {
+  if (servers.length <= 0) {
+    return "";
+  }
+
+  const result = dots.server({
+    urlPrefix: servers[0].url
+  });
+
+  return result;
+};
+
 const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
   const path = replaceParamNotation(pathString);
   const successResponse = verbDefinition.responses[200];
@@ -50,13 +62,16 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
 async function run() {
   const { output, input } = getProcessArguments();
 
-  const { paths } = await SwaggerParser.dereference(input);
+  const { paths, servers } = await SwaggerParser.dereference(input);
+
+  const serverConfig = generateServerConfiguration(servers);
 
   const apiPaths = Object.keys(paths)
     .map(path => generateRouteFromPath(path, paths[path]))
     .join("\n");
 
-  const prettified = prettier.format(apiPaths, { parser: "babel" });
+  const result = `${serverConfig} ${apiPaths}`;
+  const prettified = prettier.format(result, { parser: "babel" });
 
   fse.outputFileSync(output, prettified);
 }
