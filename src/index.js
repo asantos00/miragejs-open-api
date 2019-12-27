@@ -1,37 +1,66 @@
 const SwaggerParser = require("swagger-parser");
-const doT = require("dot");
 const fse = require("fs-extra");
-const prettier = require("prettier");
+const { processTemplate } = require("./utils/templates");
+const { buildFileContents } = require("./utils/file");
+const { ConfigManager } = require("./ConfigManager");
 const jsf = require("json-schema-faker");
-const { getProcessArguments } = require("./utils/processArguments");
 const contentType = "application/json";
-
-doT.templateSettings.strip = false;
-const dots = doT.process({
-  path: __dirname + "/templates"
-});
 
 const replaceParamNotation = url => url.replace("{", ":").replace("}", "");
 
 const generateRouteFromPath = (pathString, pathDefinition) => {
   const verbsInPath = Object.keys(pathDefinition);
-  const handlers = verbsInPath.map(verb =>
-    generateHandlerFromVerb(verb, pathString, pathDefinition[verb])
-  );
 
-  return handlers.join("\n");
+  return verbsInPath.reduce((acc, verb) => {
+    const [content, dependencies] = generateHandlerFromVerb(
+      verb,
+      pathString,
+      pathDefinition[verb],
+    );
+
+    const currentContent = acc[0] || "";
+    const currentDependencies = acc[1] || [];
+    return [
+      `${currentContent} \n ${content}`,
+      [...dependencies, ...currentDependencies],
+    ];
+  }, []);
+};
+
+const generateRoutes = paths => {
+  const [content, dependencies] = Object.keys(paths).reduce((acc, path) => {
+    const [content, dependencies] = generateRouteFromPath(path, paths[path]);
+
+    const currentContent = acc[0] || "";
+    const currentDependencies = acc[1] || [];
+    return [
+      `${currentContent} \n ${content}`,
+      [...dependencies, ...currentDependencies],
+    ];
+  }, []);
+
+  fse.outputFileSync(
+    `${ConfigManager.output}/routes.js`,
+    buildFileContents({
+      dependencies,
+      content,
+    }),
+  );
 };
 
 const generateServerConfiguration = servers => {
-  if (servers.length <= 0) {
-    return "";
-  }
+  const urlPrefix = servers && servers.length > 0 ? servers[0].url : null;
 
-  const result = dots.server({
-    urlPrefix: servers[0].url
+  const [serverConfiguration, dependencies] = processTemplate("server", {
+    urlPrefix,
   });
 
-  return result;
+  const fileContents = buildFileContents({
+    dependencies,
+    content: serverConfiguration,
+  });
+
+  fse.outputFileSync(`${ConfigManager.output}/server.js`, fileContents);
 };
 
 const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
@@ -46,36 +75,28 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
 
     body = jsf.generate(schema);
   }
-
-  const result = dots.handler({
+  const [result, dependencies] = processTemplate("handler", {
     verb,
     statusCode,
     path,
     headers: JSON.stringify({}),
     description: verbDefinition.description,
-    body: JSON.stringify(body, null, 4)
+    body: JSON.stringify(body, null, 4),
   });
 
-  return result;
+  return [result, dependencies];
 };
 
 async function run() {
-  const { output, input } = getProcessArguments();
+  const { paths, servers } = await SwaggerParser.dereference(
+    ConfigManager.input,
+  );
 
-  const { paths, servers } = await SwaggerParser.dereference(input);
+  generateRoutes(paths);
 
-  const serverConfig = generateServerConfiguration(servers);
-
-  const apiPaths = Object.keys(paths)
-    .map(path => generateRouteFromPath(path, paths[path]))
-    .join("\n");
-
-  const result = `${serverConfig} ${apiPaths}`;
-  const prettified = prettier.format(result, { parser: "babel" });
-
-  fse.outputFileSync(output, prettified);
+  generateServerConfiguration(servers);
 }
 
 module.exports = {
-  run
+  run,
 };
