@@ -23,6 +23,9 @@
       "git add"
     ]
   },
+  "jest": {
+    "setupFilesAfterEnv": ["jest-extended"]
+  },
   "bin": {
     "miragejs-open-api": "./index.js"
   },
@@ -47,6 +50,7 @@
     "eslint-plugin-jest": "^23.1.1",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
+    "jest-extended": "^0.11.2",
     "lint-staged": "^9.5.0",
     "prettier-eslint-cli": "^5.0.0"
   }
