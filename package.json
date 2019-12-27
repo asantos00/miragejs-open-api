@@ -22,7 +22,6 @@
       "git add"
     ]
   },
-  "cache": "clear",
   "bin": {
     "miragejs-open-api": "./index.js"
   },
