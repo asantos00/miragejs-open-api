@@ -2,7 +2,6 @@ const SwaggerParser = require("swagger-parser");
 const fse = require("fs-extra");
 const { processTemplate } = require("./utils/templates");
 const { buildFileContents } = require("./utils/file");
-const { ConfigManager } = require("./ConfigManager");
 const jsf = require("json-schema-faker");
 const contentType = "application/json";
 
@@ -29,7 +28,7 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
   }, []);
 };
 
-const generateRoutes = paths => {
+const generateRoutes = (paths, ConfigManager) => {
   const [content, dependencies] = Object.keys(paths).reduce((acc, path) => {
     const [routeHandlers, routeDependencies] = generateRouteFromPath(
       path,
@@ -53,7 +52,7 @@ const generateRoutes = paths => {
   );
 };
 
-const generateServerConfiguration = servers => {
+const generateServerConfiguration = (servers, ConfigManager) => {
   const urlPrefix = servers && servers.length > 0 ? servers[0].url : null;
 
   const [serverConfiguration, dependencies] = processTemplate("server", {
@@ -92,14 +91,14 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
   return [result, dependencies];
 };
 
-async function run() {
+async function run(ConfigManager) {
   const { paths, servers } = await SwaggerParser.dereference(
     ConfigManager.input,
   );
 
-  generateRoutes(paths);
+  generateRoutes(paths, ConfigManager);
 
-  generateServerConfiguration(servers);
+  generateServerConfiguration(servers, ConfigManager);
 }
 
 module.exports = {
