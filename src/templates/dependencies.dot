@@ -1,0 +1,5 @@
+import {
+    {{~it.dependencies: dependency}}
+        {{=dependency}},
+    {{~}}
+} from 'miragejs';
