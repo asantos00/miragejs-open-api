@@ -2,16 +2,34 @@
 
 Generate [miragejs](https://miragejs.com/) code based on an [OpenAPI Specification](https://github.com/OAI/OpenAPI-Specification).
 
-# Roadmap
+# Usage
 
-- Server configuration and ~~routes (path, verb, headers, response code).~~
-- Try to generate model update logic for CRUD operations based on the specification
-- Models based on the JsonSchema present on the spec.
-- Factories for the models that generate fake data based on the type and name of the model fields.
+```sh
+npx mirage-open-api --input="./example.yaml" --output="./dist/generated-mirage"
+```
+
+## Parameters
+
+- input - `--input` - Input file path (can be local or remote)
+- output - `--output` - Output folder path
 
 # Generated output
 
 ```js
+// server.js
+
+
+import { Server } from "miragejs";
+const server = new Server({
+  baseConfig() {
+    this.urlPrefix = "http://petstore.swagger.io/api";
+  }
+});
+```
+
+```js
+// routes.js
+import { Response } from "miragejs";
 /*
   GET /pets
   Returns all pets from the system that the user has access to.
@@ -19,16 +37,20 @@ Generate [miragejs](https://miragejs.com/) code based on an [OpenAPI Specificati
 this.get("/pets", (schema, request) => {
   return new Response(200, {}, [
     {
-      name: "veniam",
-      id: 79358504
+      name: "anim",
+      id: -43222528
     },
     {
-      name: "laboris dolore",
-      id: 61430864
+      name: "aliquip ex sint occaecat",
+      id: -20747246
     },
     {
-      name: "sunt fugiat dolor labore anim",
-      id: -51067098
+      name: "nostrud sed in a",
+      id: -48761945
+    },
+    {
+      name: "in mollit",
+      id: -64292085
     }
   ]);
 });
@@ -42,8 +64,8 @@ this.post("/pets", (schema, request) => {
     200,
     {},
     {
-      name: "aliqua sit quis",
-      id: -79696536
+      name: "officia nostrud sit",
+      id: -86362129
     }
   );
 });
@@ -57,8 +79,8 @@ this.get("/pets/:id", (schema, request) => {
     200,
     {},
     {
-      name: "ut",
-      id: -25101238
+      name: "labore elit commodo dolore aliquip",
+      id: -67883762
     }
   );
 });
@@ -70,4 +92,5 @@ this.get("/pets/:id", (schema, request) => {
 this.delete("/pets/:id", (schema, request) => {
   return new Response(200, {}, {});
 });
+
 ```
