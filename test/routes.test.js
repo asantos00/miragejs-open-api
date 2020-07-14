@@ -1,4 +1,4 @@
-const { getOutputFileText } = require("./utils");
+const { getOutputFileText } = require("./testHelpers");
 
 it("generates routes with headers", async () => {
   const output = await getOutputFileText();
