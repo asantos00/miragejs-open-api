@@ -2,8 +2,7 @@ const SwaggerParser = require("swagger-parser");
 const fse = require("fs-extra");
 const { processTemplate } = require("./utils/templates");
 const { buildFileContents } = require("./utils/file");
-const jsf = require("json-schema-faker");
-const contentType = "application/json";
+const { getResponse } = require("./response");
 
 const replaceParamNotation = url => url.replace("{", ":").replace("}", "");
 
@@ -14,7 +13,7 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
     const [handler, handlerDependencies] = generateHandlerFromVerb(
       verb,
       pathString,
-      pathDefinition[verb],
+      pathDefinition[verb]
     );
 
     const currentHandlers = acc[0] || [];
@@ -23,7 +22,7 @@ const generateRouteFromPath = (pathString, pathDefinition) => {
     // Merge content and dependencies
     return [
       [...currentHandlers, handler],
-      [...handlerDependencies, ...currentDependencies],
+      [...handlerDependencies, ...currentDependencies]
     ];
   }, []);
 };
@@ -32,14 +31,14 @@ const generateRoutes = (paths, ConfigManager) => {
   const [content, dependencies] = Object.keys(paths).reduce((acc, path) => {
     const [routeHandlers, routeDependencies] = generateRouteFromPath(
       path,
-      paths[path],
+      paths[path]
     );
 
     const handlers = acc[0] || [];
     const dependencies = acc[1] || [];
     return [
       [...handlers, ...routeHandlers],
-      [...dependencies, ...routeDependencies],
+      [...dependencies, ...routeDependencies]
     ];
   }, []);
 
@@ -48,7 +47,8 @@ const generateRoutes = (paths, ConfigManager) => {
     buildFileContents({
       dependencies,
       content: content.join("\n"),
-    }),
+      file: "routes"
+    })
   );
 };
 
@@ -56,12 +56,12 @@ const generateServerConfiguration = (servers, ConfigManager) => {
   const urlPrefix = servers && servers.length > 0 ? servers[0].url : null;
 
   const [serverConfiguration, dependencies] = processTemplate("server", {
-    urlPrefix,
+    urlPrefix
   });
 
   const fileContents = buildFileContents({
     dependencies,
-    content: serverConfiguration,
+    content: serverConfiguration
   });
 
   fse.outputFileSync(`${ConfigManager.output}/server.js`, fileContents);
@@ -69,23 +69,16 @@ const generateServerConfiguration = (servers, ConfigManager) => {
 
 const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
   const path = replaceParamNotation(pathString);
-  const successResponse = verbDefinition.responses[200];
+  const [statusCode] = Object.keys(verbDefinition.responses);
+  const { headers, body } = getResponse(verbDefinition.responses[statusCode]);
 
-  let body = {};
-  let statusCode = 200;
-
-  if (successResponse) {
-    const schema = successResponse.content[contentType].schema;
-
-    body = jsf.generate(schema);
-  }
   const [result, dependencies] = processTemplate("handler", {
     verb,
     statusCode,
     path,
-    headers: JSON.stringify({}),
+    headers: JSON.stringify(headers, null, 4),
     description: verbDefinition.description,
-    body: JSON.stringify(body, null, 4),
+    body: JSON.stringify(body, null, 4)
   });
 
   return [result, dependencies];
@@ -93,7 +86,7 @@ const generateHandlerFromVerb = (verb, pathString, verbDefinition) => {
 
 async function run(ConfigManager) {
   const { paths, servers } = await SwaggerParser.dereference(
-    ConfigManager.input,
+    ConfigManager.input
   );
 
   generateRoutes(paths, ConfigManager);
@@ -102,5 +95,5 @@ async function run(ConfigManager) {
 }
 
 module.exports = {
-  run,
+  run
 };

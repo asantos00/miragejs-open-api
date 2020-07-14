@@ -1,19 +1,20 @@
 it("runs", async () => {
   const mockOutputFileSync = jest.fn();
+
   jest.mock("fs-extra", () => ({
-    outputFileSync: mockOutputFileSync,
+    outputFileSync: mockOutputFileSync
   }));
 
   const MirageOpenAPIGenerator = require("../src/index");
 
   await MirageOpenAPIGenerator.run({
-    input: "./__tests__/fixtures/example.yaml",
-    output: "./dist/test-generated",
+    input: "./fixtures/example.yaml",
+    output: "./fixtures/generated"
   });
 
   // Check the file path is correct
   expect(mockOutputFileSync.mock.calls[0][0]).toBe(
-    "./dist/test-generated/routes.js",
+    "./fixtures/generated/routes.js"
   );
   // Check for existance of some routes
   expect(mockOutputFileSync.mock.calls[0][1]).toInclude("/pets");
@@ -21,7 +22,7 @@ it("runs", async () => {
 
   // Check the file path is correct
   expect(mockOutputFileSync.mock.calls[1][0]).toBe(
-    "./dist/test-generated/server.js",
+    "./fixtures/generated/server.js"
   );
   // Check for existance of some routes
   expect(mockOutputFileSync.mock.calls[1][1]).toInclude("urlPrefix");

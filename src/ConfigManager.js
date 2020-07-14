@@ -6,7 +6,7 @@ const ConfigManager = (function() {
     const { output, input } = getProcessArguments();
     return {
       output,
-      input,
+      input
     };
   }
 
