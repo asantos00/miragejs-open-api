@@ -6,4 +6,4 @@ const propertyNameInferenceMap = {
   email: () => faker.internet.email()
 };
 
-export default propertyNameInferenceMap;
+module.exports = propertyNameInferenceMap;

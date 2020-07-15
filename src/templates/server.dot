@@ -1,7 +1,4 @@
-const server = new Server({
-  baseConfig() {
-    {{? it.urlPrefix }}
-      this.urlPrefix = "{{=it.urlPrefix}}"
-    {{?}}
-  }
+export const configureServer = (serverArgs) => new Server({
+  urlPrefix : "{{=it.urlPrefix}}",
+  ...serverArgs
 })
