@@ -45,11 +45,13 @@ It will generate files that can then be imported together with an existing Mirag
 // server.js
 
 import { Server } from "miragejs";
-const server = new Server({
-  baseConfig() {
-    this.urlPrefix = "http://petstore.swagger.io/api";
-  }
-});
+
+export const configureServer = serverArgs =>
+  new Server({
+    urlPrefix: "http://petstore.swagger.io/api",
+    ...serverArgs
+  });
+
 ```
 
 ```js
