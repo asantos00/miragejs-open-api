@@ -16,7 +16,7 @@ The package provides a user customisable file to define what data to generate ba
 
 In the near future, MirageJS factories and Models will be exported by the generated files. At the moment the Mirage API returns 'hardcoded' fake data (look at generated output below), in the future this data should use Factories and seeds to make it more interactive and close to real.
 
-The vision is to **generate the complete set of Mirage entities (models, factories, route handlers)** and the connections between them. It should allow to start using full featured mirage just by running the generator against a spec file.
+The goal is to **generate the complete set of Mirage entities (models, factories, route handlers)** and the connections between them. It should allow to start using full featured mirage just by running the generator against a spec file.
 
 One of the identified difficulties of this approach is that the spec might not have enough data for the generator to be able to infer the relations, but that's something still in discussion/research.
 
