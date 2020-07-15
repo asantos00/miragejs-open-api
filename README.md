@@ -89,7 +89,8 @@ import {defineRoutes} from './generated';
 
 const server = new Server({
   // User already existing mirage config,
-  routes(server) {
+  routes() {
+    const server = this;
     defineRoutes(server);
 
     server.get('/pets', () => {
