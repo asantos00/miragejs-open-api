@@ -6,25 +6,21 @@ Generate [miragejs](https://miragejs.com/) code based on an [OpenAPI Specificati
 
 # Vision
 
-This package aims to be used to generate a [miragejs](https://miragejs.com/) configuration while letting the user override specific routes.
-
-The main goal is for the generator to always run, only affecting the generated files and not the user overrides, treating the generated files as disposable.
-
-It should expose functions and utilities the user can plug into his MirageJS configuration.
+To enable generating a **pluggable** [miragejs](https://miragejs.com/) configuration with mocked data based on the user's OpenAPI spec. Generated files should be seen as disposable and able to be generated **at any time** from the spec file.
 
 # Roadmap
 
-Currently, the package generates the routes defined on the openapi spec file. The response that mirage will return will be the first response listed on the spec file (example: a 200 for a REST GET request).
+Currently the package generates the routes defined on the openapi spec file. Those routes respond with the first defined response on the spec for that route (spec.responses.0).
 
-It uses the schema types and formats to generate fake data. We plan to add a file where the generator user can choose what `fakerjs` functions to run based on the names of the fields, for instance, running `faker.date.past` for a `createdAt` and `updatedAt` fields.
+The package provides a user customisable file to define what data to generate based on the json keys to enable better mocked data. For instance, running `faker.date.past` for `createdAt` and `updatedAt` fields.
 
-In the near future, MirageJS factories and Models might be generated. Currently, the API returns 'hardcoded' fake data (look at generated output below), it means that doesn't matter how many times the request is done, the data is always the same. A future solution would be to use Factories to make sure the generated data is different on every request.
+In the near future, MirageJS factories and Models will be exported by the generated files. At the moment the Mirage API returns 'hardcoded' fake data (look at generated output below), in the future this data should use Factories and seeds to make it more interactive and close to real.
 
-The vision is to generate the complete set of Mirage entities (models, factories, route handlers) and the connections between them, allowing to use the Mirage in-memory database to CRUD records, all of this generated without the user having to configure a thing.
+The vision is to **generate the complete set of Mirage entities (models, factories, route handlers)** and the connections between them. It should allow to start using full featured mirage just by running the generator against a spec file.
 
-One of the identified difficulties of this approach is that the spec might not have enough data for the generator to be able to infer the relations.
+One of the identified difficulties of this approach is that the spec might not have enough data for the generator to be able to infer the relations, but that's something still in discussion/research.
 
-We're very happy to accept any contributions, opinions, suggestions and why/how is it working or not for your use case.
+We're very happy to accept any contributions, opinions, suggestions and why/how is it working or not for your use case and what can we do to make it work.
 
 # Usage
 
@@ -80,7 +76,9 @@ export const defineRoutes = server => {
 
 ```
 
-For instance, having an existing mirage config but wanting to use the routes defined by the generated file:
+# Plugging into an existing configuration
+
+The generated files export functions that can be used together with an existing MirageJS config.
 
 ```js
 import { Server } from "miragejs";
