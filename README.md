@@ -85,11 +85,12 @@ For instance, having an existing mirage config but wanting to use the routes def
 ```js
 import { Server } from "miragejs";
 
-import {defineRoutes} from './generated';
+import {defineRoutes} from './generated/routes';
 
 const server = new Server({
   // User already existing mirage config,
-  routes(server) {
+  routes() {
+    const server = this;
     defineRoutes(server);
 
     server.get('/pets', () => {
