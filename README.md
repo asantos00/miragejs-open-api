@@ -14,7 +14,7 @@ Currently, the package generates the routes defined on the OpenAPI spec file, us
 
 To improve the quality of the mocked data, a user-customizable file is available for specifying what data to generate based on JSON keys (e.g: running `faker.date.past` for `createdAt` and `updatedAt` fields).
 
-In the near future, MirageJS factories and Models will be exported by the generated files. At the moment the Mirage API returns 'hardcoded' fake data (look at generated output below), in the future this data should use Factories and seeds to make it more interactive and close to real.
+In the near future, MirageJS factories and Models will be exported by the generated files. At the moment the Mirage API returns 'hardcoded' fake data (look at the generated output below), in the future this data should use Factories and seeds to make it more interactive and closer to a real implementation.
 
 The goal is to **generate the complete set of Mirage entities (models, factories, route handlers)** and the connections between them. It should allow to start using full featured mirage just by running the generator against a spec file.
 
