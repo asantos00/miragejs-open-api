@@ -10,7 +10,7 @@ To enable generating a **pluggable** [miragejs](https://miragejs.com/) configura
 
 # Roadmap
 
-Currently the package generates the routes defined on the openapi spec file. Those routes respond with the first defined response on the spec for that route (spec.responses.0).
+Currently, the package generates the routes defined on the OpenAPI spec file, using `spec.responses.0` as the response.
 
 The package provides a user customisable file to define what data to generate based on the json keys to enable better mocked data. For instance, running `faker.date.past` for `createdAt` and `updatedAt` fields.
 
