@@ -3,7 +3,7 @@ const imports = require("../templates/imports");
 
 doT.templateSettings.strip = false;
 const templates = doT.process({
-  path: `${__dirname}/../templates/`,
+  path: `${__dirname}/../templates/`
 });
 
 const getTemplateImports = name => imports[name] || [];
@@ -21,5 +21,5 @@ const processTemplate = (name, options) => {
 module.exports = {
   templates,
   processTemplate,
-  getTemplateImports,
+  getTemplateImports
 };

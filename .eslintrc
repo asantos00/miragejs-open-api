@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "prettier"
-  ],
+  "extends": ["eslint:recommended", "prettier"],
   "env": {
     "node": true,
     "jest/globals": true
@@ -15,7 +12,6 @@
   "rules": {
     "semi": "error",
     "prefer-template": "error",
-    "comma-dangle": ["error", "always-multiline"],
     "quotes": ["error", "double", "avoid-escape"]
   }
 }

@@ -2,18 +2,22 @@ const prettier = require("prettier");
 const { processTemplate } = require("./templates");
 const uniq = require("lodash.uniq");
 
-const buildFileContents = ({ dependencies, content }) => {
+const buildFileContents = ({ dependencies, content, file = "" }) => {
+  let contentToWrite = content;
+
   const [dependenciesContent] = processTemplate("dependencies", {
-    dependencies: uniq(dependencies),
+    dependencies: uniq(dependencies)
   });
 
-  const prettified = prettier.format(`${dependenciesContent} \n ${content}`, {
-    parser: "babel",
-  });
+  if (file) {
+    contentToWrite = processTemplate(`file-${file}`, { content })[0];
+  }
 
-  return prettified;
+  return prettier.format(`${dependenciesContent} \n ${contentToWrite}`, {
+    parser: "babel"
+  });
 };
 
 module.exports = {
-  buildFileContents,
+  buildFileContents
 };
